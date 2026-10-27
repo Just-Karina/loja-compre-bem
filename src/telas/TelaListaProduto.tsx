@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FlatList, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { getProdutos } from '../service/produto-service';
 
 
 export type Produto = {
@@ -46,14 +47,20 @@ function ProdutoItem({ produto, onPress }: { produto: Produto; onPress: () => vo
 }
 
 function TelaListaProdutos({ navigation }: Props) {
-    const [produtos] = useState<Produto[]>(produtosIniciais);
+    const [produtos, setProdutos] = useState<Produto[]>(produtosIniciais);
 
+     useEffect(() => {
+        getProdutos(0, "").then((resposta) => {
+            setProdutos(resposta);
+        });
+    }, []);
+    
      return (
     <SafeAreaView>
 
       <View style={styles.container}>
         <FlatList
-          data={produtosIniciais}
+          data={produtos}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <ProdutoItem
