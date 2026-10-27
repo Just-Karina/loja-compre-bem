@@ -1,17 +1,19 @@
 import { View, Text, Image, StyleSheet } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../App';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Produto } from './TelaListaProduto';
+import { RootStackParamList } from '../../App';
 
 function DetalheProduto({ produto }: { produto: Produto }) {
     return (
-        <View style={styles.container}>
-            {produto.imagem && <Image source={produto.imagem} style={styles.imagem} />}
-            <Text style={styles.nome}>{produto.nome}</Text>
-            <Text style={styles.preco}>{produto.preco}</Text>
-            {produto.descricao && <Text style={styles.descricao}>{produto.descricao}</Text>}
-        </View>
-    );
+    <SafeAreaView>
+      <View style={styles.container}>
+        <Text style={styles.nome}>{produto.nome}</Text>
+        <Text style={styles.preco}>{produto.preco}</Text>
+        {produto.descricao && <Text style={styles.descricao}>{produto.descricao}</Text>}
+      </View>
+    </SafeAreaView>
+  );
 }
 
 type Props = NativeStackScreenProps<RootStackParamList, 'DetalheProduto'>;

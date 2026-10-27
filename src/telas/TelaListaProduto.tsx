@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FlatList, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 export type Produto = {
@@ -35,27 +36,35 @@ export const produtosIniciais: Produto[] = [
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ListaProdutos'>;
 
+function ProdutoItem({ produto, onPress }: { produto: Produto; onPress: () => void }) {
+  return (
+    <TouchableOpacity style={styles.item} onPress={onPress}>
+      <Text style={styles.nome}>{produto.nome}</Text>
+      <Text style={styles.preco}>{produto.preco}</Text>
+    </TouchableOpacity>
+  );
+}
+
 function TelaListaProdutos({ navigation }: Props) {
     const [produtos] = useState<Produto[]>(produtosIniciais);
 
-    return (
-        <View style={styles.container}>
+     return (
+    <SafeAreaView>
 
-            <FlatList
-                data={produtos}
-                keyExtractor={(item) => String(item.id)}
-                renderItem={({ item }) => (
-                    <TouchableOpacity
-                        style={styles.item}
-                        onPress={() => navigation.navigate('DetalheProduto', { produto: item })}
-                    >
-                        <Text style={styles.nome}>{item.nome}</Text>
-                        <Text style={styles.preco}>{item.preco}</Text>
-                    </TouchableOpacity>
-                )}
+      <View style={styles.container}>
+        <FlatList
+          data={produtosIniciais}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <ProdutoItem
+              produto={item}
+              onPress={() => navigation.navigate('DetalheProduto', { produto: item })}
             />
-        </View>
-    );
+          )}
+        />
+      </View>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
